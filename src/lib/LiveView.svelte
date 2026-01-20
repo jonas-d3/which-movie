@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { flip } from 'svelte/animate';
   import { movies } from './stores';
   import type { Movie } from './api';
 
@@ -48,16 +49,12 @@
         {@const colors = getColors(movie.genre)}
         {@const percentage = maxVotes > 0 ? (movie.votes / maxVotes) * 100 : 0}
         
-        <button
-          onclick={() => onSelectGenre(movie)}
-          class="w-full text-left group"
-        >
+        <div animate:flip={{ duration: 400 }}>
+          <button
+            onclick={() => onSelectGenre(movie)}
+            class="w-full text-left group"
+          >
           <div class="relative {colors.bg} border border-zinc-800 rounded-xl p-5 transition-all duration-300 hover:border-zinc-600 hover:scale-[1.01] overflow-hidden">
-            <!-- Rank badge -->
-            <div class="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-sm font-bold text-zinc-400">
-              {index + 1}
-            </div>
-            
             <!-- Progress bar background -->
             <div class="absolute inset-0 opacity-20">
               <div 
@@ -69,9 +66,12 @@
             <!-- Content -->
             <div class="relative z-10">
               <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold {colors.text} capitalize group-hover:text-zinc-100 transition-colors">
-                  {movie.genre}
-                </span>
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl font-mono font-bold text-zinc-500">{index + 1}.</span>
+                  <span class="text-2xl font-bold {colors.text} capitalize group-hover:text-zinc-100 transition-colors">
+                    {movie.genre}
+                  </span>
+                </div>
                 <div class="flex items-center gap-4">
                   <span class="text-3xl font-mono font-bold text-zinc-100">
                     {movie.votes}
@@ -79,14 +79,12 @@
                   <span class="text-sm text-zinc-500">
                     vote{movie.votes !== 1 ? 's' : ''}
                   </span>
-                  <svg class="w-5 h-5 text-zinc-600 group-hover:text-zinc-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
                 </div>
               </div>
             </div>
           </div>
         </button>
+        </div>
       {/each}
     </div>
 
