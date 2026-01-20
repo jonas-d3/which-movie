@@ -91,48 +91,36 @@
     </button>
   </div>
 {:else}
-  <!-- Genre-only view (for voting) -->
-  <div class="{getGenreBgColor(movie.genre)} border rounded-2xl p-8 transition-all duration-300 hover:scale-[1.02] {myVotes > 0 ? 'ring-2 ring-emerald-500/50' : ''}">
+  <!-- Genre-only view (for voting) - entire card is clickable -->
+  <button
+    onclick={handleVote}
+    disabled={!canVote || isVoting}
+    class="w-full text-left {getGenreBgColor(movie.genre)} border rounded-2xl p-10 transition-all duration-300 
+      {canVote ? 'hover:scale-[1.02] cursor-pointer active:scale-[0.98]' : 'opacity-60 cursor-not-allowed'} 
+      {myVotes > 0 ? 'ring-2 ring-emerald-500/50' : ''}"
+  >
     <div class="text-center">
-      <span class="text-xl font-bold text-zinc-100 capitalize">
-        {movie.genre}
-      </span>
-      
-      {#if myVotes > 0}
-        <div class="mt-3 text-emerald-400 flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      {#if isVoting}
+        <div class="flex items-center justify-center gap-2 text-zinc-300">
+          <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span class="font-medium">{myVotes === 2 ? 'You voted twice!' : 'You voted for this'}</span>
         </div>
-      {/if}
-      
-      {#if canVote}
-        <button
-          onclick={handleVote}
-          disabled={!canVote || isVoting}
-          class="mt-6 w-full py-4 px-6 rounded-xl font-semibold text-base transition-all duration-200 
-            {canVote 
-              ? 'bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer active:scale-[0.98] shadow-lg shadow-emerald-500/20' 
-              : 'bg-zinc-800/50 text-zinc-500 cursor-not-allowed'}"
-        >
-          {#if isVoting}
-            <span class="flex items-center justify-center gap-2">
-              <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Voting...
-            </span>
-          {:else}
-            Vote
-          {/if}
-        </button>
-      {:else if myVotes === 0}
-        <div class="mt-6 py-4 px-6 text-zinc-500 text-base">
-          No votes left
-        </div>
+      {:else}
+        <span class="text-2xl font-bold text-zinc-100 capitalize">
+          {movie.genre}
+        </span>
+        
+        {#if myVotes > 0}
+          <div class="mt-2 text-emerald-400 flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-sm font-medium">{myVotes === 2 ? 'Voted twice!' : 'Voted'}</span>
+          </div>
+        {/if}
       {/if}
     </div>
-  </div>
+  </button>
 {/if}
