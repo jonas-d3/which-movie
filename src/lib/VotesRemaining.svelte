@@ -1,6 +1,12 @@
 <script lang="ts">
   import { votesRemaining, votedMovies } from './stores';
 
+  interface Props {
+    onToggleSecret?: () => void;
+  }
+
+  let { onToggleSecret }: Props = $props();
+
   function clearLocalVotes() {
     votedMovies.set([]);
   }
@@ -17,7 +23,7 @@
         {/each}
       </div>
       <span class="text-sm font-medium {$votesRemaining > 0 ? 'text-zinc-300' : 'text-zinc-500'}">
-        {$votesRemaining} vote{$votesRemaining !== 1 ? 's' : ''} <button onclick={clearLocalVotes} class="cursor-text hover:text-emerald-400 transition-colors">left</button>
+        {$votesRemaining} <button onclick={() => onToggleSecret?.()} class="cursor-text hover:text-emerald-400 transition-colors">vote{$votesRemaining !== 1 ? 's' : ''}</button> <button onclick={clearLocalVotes} class="cursor-text hover:text-emerald-400 transition-colors">left</button>
       </span>
     </div>
   </div>

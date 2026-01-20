@@ -16,6 +16,11 @@
   let selectedMovie = $state<Movie | null>(null);
   let isLoading = $state(true);
   let error = $state<string | null>(null);
+  let showSecretButtons = $state(false);
+
+  function toggleSecretButtons() {
+    showSecretButtons = !showSecretButtons;
+  }
 
   onMount(() => {
     // Check for view mode via URL parameter
@@ -125,24 +130,26 @@
           >
             Vote
           </button>
-          <button
-            onclick={() => navigateTo('live')}
-            class="text-sm px-3 py-1.5 rounded-lg transition-colors
-              {currentView === 'live' || currentView === 'detail'
-                ? 'bg-emerald-600/20 text-emerald-400' 
-                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}"
-          >
-            Live Results
-          </button>
-          <button
-            onclick={() => navigateTo('admin')}
-            class="text-sm px-3 py-1.5 rounded-lg transition-colors
-              {currentView === 'admin' 
-                ? 'bg-emerald-600/20 text-emerald-400' 
-                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}"
-          >
-            Admin
-          </button>
+          {#if showSecretButtons || currentView === 'live' || currentView === 'detail' || currentView === 'admin'}
+            <button
+              onclick={() => navigateTo('live')}
+              class="text-sm px-3 py-1.5 rounded-lg transition-colors
+                {currentView === 'live' || currentView === 'detail'
+                  ? 'bg-emerald-600/20 text-emerald-400' 
+                  : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}"
+            >
+              Live Results
+            </button>
+            <button
+              onclick={() => navigateTo('admin')}
+              class="text-sm px-3 py-1.5 rounded-lg transition-colors
+                {currentView === 'admin' 
+                  ? 'bg-emerald-600/20 text-emerald-400' 
+                  : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}"
+            >
+              Admin
+            </button>
+          {/if}
         </div>
       </div>
     </div>
@@ -196,7 +203,7 @@
         </div>
       {/if}
       
-      <VotesRemaining />
+      <VotesRemaining onToggleSecret={toggleSecretButtons} />
     {/if}
   </main>
 </div>
