@@ -2,6 +2,7 @@
   import type { Movie } from './api';
   import { voteForMovie } from './api';
   import { votedMovies, votesRemaining, votesForMovie, addVote } from './stores';
+  import { getGenreColor, getGenreBgColor } from './genreColors';
 
   interface Props {
     movie: Movie;
@@ -12,40 +13,6 @@
   let { movie, showVotes = false, showDetails = true }: Props = $props();
 
   let isVoting = $state(false);
-
-  const genreColors: Record<string, string> = {
-    action: 'bg-red-500/20 text-red-400 border-red-500/30',
-    comedy: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    drama: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-    horror: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-    'sci-fi': 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-    romance: 'bg-pink-500/20 text-pink-400 border-pink-500/30',
-    thriller: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-    animation: 'bg-green-500/20 text-green-400 border-green-500/30',
-    documentary: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  };
-
-  const genreBgColors: Record<string, string> = {
-    action: 'from-red-500/10 to-red-900/20 border-red-500/20',
-    comedy: 'from-yellow-500/10 to-yellow-900/20 border-yellow-500/20',
-    drama: 'from-purple-500/10 to-purple-900/20 border-purple-500/20',
-    horror: 'from-orange-500/10 to-orange-900/20 border-orange-500/20',
-    'sci-fi': 'from-cyan-500/10 to-cyan-900/20 border-cyan-500/20',
-    romance: 'from-pink-500/10 to-pink-900/20 border-pink-500/20',
-    thriller: 'from-amber-500/10 to-amber-900/20 border-amber-500/20',
-    animation: 'from-green-500/10 to-green-900/20 border-green-500/20',
-    documentary: 'from-blue-500/10 to-blue-900/20 border-blue-500/20',
-  };
-
-  function getGenreColor(genre: string): string {
-    const key = genre.toLowerCase();
-    return genreColors[key] || 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-  }
-
-  function getGenreBgColor(genre: string): string {
-    const key = genre.toLowerCase();
-    return genreBgColors[key] || 'from-zinc-500/10 to-zinc-900/20 border-zinc-500/20';
-  }
 
   let myVotes = $derived(votesForMovie(movie.id, $votedMovies));
   let canVote = $derived($votesRemaining > 0);
@@ -114,7 +81,7 @@
           </svg>
           Voting...
         </span>
-      {:else if alreadyVoted}
+      {:else if myVotes > 0}
         ✓ Voted
       {:else if $votesRemaining === 0}
         No votes left
@@ -125,9 +92,9 @@
   </div>
 {:else}
   <!-- Genre-only view (for voting) -->
-  <div class="bg-gradient-to-br {getGenreBgColor(movie.genre)} border rounded-2xl p-8 transition-all duration-300 hover:scale-[1.02] {myVotes > 0 ? 'ring-2 ring-emerald-500/50' : ''}">
+  <div class="{getGenreBgColor(movie.genre)} border rounded-2xl p-8 transition-all duration-300 hover:scale-[1.02] {myVotes > 0 ? 'ring-2 ring-emerald-500/50' : ''}">
     <div class="text-center">
-      <span class="text-3xl font-bold text-zinc-100 capitalize">
+      <span class="text-xl font-bold text-zinc-100 capitalize">
         {movie.genre}
       </span>
       

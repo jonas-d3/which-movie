@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Movie } from './api';
+  import { getGenreGradient } from './genreColors';
 
   interface Props {
     movie: Movie;
@@ -7,23 +8,6 @@
   }
 
   let { movie, onBack }: Props = $props();
-
-  const genreColors: Record<string, string> = {
-    action: 'from-red-600 to-red-900',
-    comedy: 'from-yellow-600 to-yellow-900',
-    drama: 'from-purple-600 to-purple-900',
-    horror: 'from-orange-600 to-orange-900',
-    'sci-fi': 'from-cyan-600 to-cyan-900',
-    romance: 'from-pink-600 to-pink-900',
-    thriller: 'from-amber-600 to-amber-900',
-    animation: 'from-green-600 to-green-900',
-    documentary: 'from-blue-600 to-blue-900',
-  };
-
-  function getGradient(genre: string): string {
-    const key = genre.toLowerCase();
-    return genreColors[key] || 'from-zinc-600 to-zinc-900';
-  }
 </script>
 
 <div class="space-y-6">
@@ -39,7 +23,7 @@
   </button>
 
   <!-- Hero section -->
-  <div class="bg-gradient-to-br {getGradient(movie.genre)} rounded-3xl p-8 md:p-12">
+  <div class="bg-gradient-to-br {getGenreGradient(movie.genre)} rounded-3xl p-8 md:p-12">
     <div class="max-w-2xl">
       <span class="inline-block px-4 py-1.5 bg-black/30 backdrop-blur rounded-full text-sm font-medium text-white/80 mb-4 capitalize">
         {movie.genre}

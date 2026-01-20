@@ -191,11 +191,6 @@
           <p class="text-sm mt-2">Ask the admin to add some movies!</p>
         </div>
       {:else}
-        <div class="text-center mb-8">
-          <h2 class="text-2xl font-bold text-zinc-100 mb-2">Vote for a Genre</h2>
-          <p class="text-zinc-500">Pick the genre you want to watch tonight</p>
-        </div>
-        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           {#each $movies as movie (movie.id)}
             <MovieCard {movie} showVotes={false} showDetails={false} />

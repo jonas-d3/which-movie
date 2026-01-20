@@ -2,6 +2,7 @@
   import { flip } from 'svelte/animate';
   import { movies } from './stores';
   import type { Movie } from './api';
+  import { getGenreBarColors } from './genreColors';
 
   interface Props {
     onSelectGenre: (movie: Movie) => void;
@@ -14,23 +15,6 @@
   
   // Get max votes for bar scaling
   let maxVotes = $derived(Math.max(...$movies.map(m => m.votes), 1));
-
-  const genreColors: Record<string, { bg: string; bar: string; text: string }> = {
-    action: { bg: 'bg-red-500/10', bar: 'bg-red-500', text: 'text-red-400' },
-    comedy: { bg: 'bg-yellow-500/10', bar: 'bg-yellow-500', text: 'text-yellow-400' },
-    drama: { bg: 'bg-purple-500/10', bar: 'bg-purple-500', text: 'text-purple-400' },
-    horror: { bg: 'bg-orange-500/10', bar: 'bg-orange-500', text: 'text-orange-400' },
-    'sci-fi': { bg: 'bg-cyan-500/10', bar: 'bg-cyan-500', text: 'text-cyan-400' },
-    romance: { bg: 'bg-pink-500/10', bar: 'bg-pink-500', text: 'text-pink-400' },
-    thriller: { bg: 'bg-amber-500/10', bar: 'bg-amber-500', text: 'text-amber-400' },
-    animation: { bg: 'bg-green-500/10', bar: 'bg-green-500', text: 'text-green-400' },
-    documentary: { bg: 'bg-blue-500/10', bar: 'bg-blue-500', text: 'text-blue-400' },
-  };
-
-  function getColors(genre: string) {
-    const key = genre.toLowerCase();
-    return genreColors[key] || { bg: 'bg-zinc-500/10', bar: 'bg-zinc-500', text: 'text-zinc-400' };
-  }
 </script>
 
 <div class="space-y-6">
@@ -46,7 +30,7 @@
   {:else}
     <div class="space-y-4">
       {#each sortedMovies as movie, index (movie.id)}
-        {@const colors = getColors(movie.genre)}
+        {@const colors = getGenreBarColors(movie.genre)}
         {@const percentage = maxVotes > 0 ? (movie.votes / maxVotes) * 100 : 0}
         
         <div animate:flip={{ duration: 400 }}>
@@ -67,8 +51,8 @@
             <div class="relative z-10">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                  <span class="text-2xl font-mono font-bold text-zinc-500">{index + 1}.</span>
-                  <span class="text-2xl font-bold {colors.text} capitalize group-hover:text-zinc-100 transition-colors">
+                  <span class="text-lg font-mono font-bold text-zinc-500">{index + 1}.</span>
+                  <span class="text-lg font-bold {colors.text} capitalize group-hover:text-zinc-100 transition-colors">
                     {movie.genre}
                   </span>
                 </div>
